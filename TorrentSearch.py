@@ -20,7 +20,11 @@ def _1337x(search):
     soup=BeautifulSoup(res.content,features='html.parser')
     link_con=0
     for link in soup.find_all('a'):
-        if search.lower() in link.text.lower():
+        srch_vrf=0
+        for nt in search.lower().split():
+            if nt in link.text.lower():
+                srch_vrf+=1
+        if srch_vrf >= len(search.lower().split()):
             names.append(link.text.strip())
             url_f.append("https://1337x.to"+link.get('href'))
             link_con += 1
@@ -52,7 +56,11 @@ def idope(search):
     soup=BeautifulSoup(res.content,features='html.parser')
     link_con=0
     for link in soup.find_all('a'):
-        if search.lower() in link.text.lower().strip():
+        srch_vrf=0
+        for nt in search.lower().split():
+            if nt in link.text.lower():
+                srch_vrf+=1
+        if srch_vrf >= len(search.lower().split()):
             names.append(link.text.strip())
             url_f.append("https://idope.se"+link.get('href'))
             link_con += 1
