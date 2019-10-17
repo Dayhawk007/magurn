@@ -2,12 +2,20 @@ print("Initializing....")
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import os
 searchterm=input("Enter the name of torrent you want to search\n")
 tor_seed={}
 names=[]
 urls=[]
 seeds=[]
 magnets=[]
+
+
+def copyToClipBoard(text):
+    command = 'echo ' + text.strip() + '| clip'
+    os.system(command)
+
+
 def _1337x(search):
     url_f=[]
     search_l=search.split()
@@ -86,4 +94,6 @@ df=pd.DataFrame(tor_seed)
 df.sort_values('Seeders')
 print("Name:\n"+df["Names"][0])
 print("Magnet Link:\n"+df["Magnets"][0])
+copyToClipBoard(df["Magnets"][0])
+print("Magnet Copied to ClipBoard")
 input("Press Any Key to Close")
