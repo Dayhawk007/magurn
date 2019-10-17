@@ -1,2 +1,5 @@
 .vscode/
 env
+*.spec
+*cache*
+build
