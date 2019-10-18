@@ -3,25 +3,17 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 import os
-searchterm=input("Enter the name of torrent you want to search\n")
-tor_seed={}
-names=[]
-urls=[]
-seeds=[]
-magnets=[]
-
 
 def copyToClipBoard(text):
     command = 'echo ' + text.strip() + '| clip'
     os.system(command)
-
 
 def _1337x(search):
     url_f=[]
     search_l=search.split()
 
     search_name="+".join(search_l)
-    req_url="https://www.1337x.to/search/"+str(search_name)+"/1/"
+    req_url="https://1337x.to/search/"+str(search_name)+"/1/"
     res=requests.get(req_url,headers={
         'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0'
     })
@@ -34,7 +26,7 @@ def _1337x(search):
                 srch_vrf+=1
         if srch_vrf >= len(search.lower().split()):
             names.append(link.text.strip())
-            url_f.append("https://www.1337x.to"+link.get('href'))
+            url_f.append("https://1337x.to"+link.get('href'))
             link_con += 1
         if link_con==2:
             break
@@ -54,7 +46,6 @@ def _1337x(search):
                     pass
     for x in url_f:
         urls.append(x)
-
 
 def idope(search):
     url_f=[]
@@ -91,18 +82,26 @@ def idope(search):
     for x in url_f:
         urls.append(x)
 
-print("Scraping from idope....")
-idope(searchterm)
-print("Scraping from 1337x....")
-_1337x(searchterm)
-tor_seed["Names"]=names
-tor_seed["Links"]=urls
-tor_seed["Seeders"]=seeds
-tor_seed["Magnets"]=magnets
-df=pd.DataFrame(tor_seed)
-df.sort_values('Seeders')
-print("Name:\n"+df["Names"][0])
-print("Magnet Link:\n"+df["Magnets"][0])
-copyToClipBoard(df["Magnets"][0])
-print("Magnet Copied to ClipBoard")
-input("Press Any Key to Close")
+while(1):
+    tor_seed={}
+    names=[]
+    urls=[]
+    seeds=[]
+    magnets=[]
+    searchterm=input("Enter the name of torrent you want to search\n")
+    print("Scraping from idope....")
+    idope(searchterm)
+    print("Scraping from 1337x....")
+    _1337x(searchterm)
+    tor_seed["Names"]=names
+    tor_seed["Links"]=urls
+    tor_seed["Seeders"]=seeds
+    tor_seed["Magnets"]=magnets
+    df=pd.DataFrame(tor_seed)
+    df.sort_values('Seeders')
+    print("Name:\n"+df["Names"][0])
+    print("Magnet Link:\n"+df["Magnets"][0])
+    copyToClipBoard(df["Magnets"][0])
+    print("Magnet Copied to ClipBoard")
+    print("Press Ctrl+C to Close")
+
