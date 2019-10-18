@@ -104,3 +104,4 @@ while(1):
     copyToClipBoard(df["Magnets"][0])
     print("Magnet Copied to ClipBoard")
     print("Press Ctrl+C to Close")
+
