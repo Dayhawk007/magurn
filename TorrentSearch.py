@@ -13,9 +13,13 @@ def _1337x(search):
 
     search_name="+".join(search_l)
     req_url="https://1337x.to/search/"+str(search_name)+"/1/"
-    res=requests.get(req_url,headers={
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0'
-    })
+    try:
+        res=requests.get(req_url,headers={
+            'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0'
+        })
+    except:
+        print("\nERROR in accessing 1337x: Please Use VPN or Proxy\n")
+        return
     soup=BeautifulSoup(res.content,features='html.parser')
     link_con=0
     for link in soup.find_all('a'):
@@ -42,16 +46,20 @@ def _1337x(search):
                 if 'magnet' in magnet.text.split()[0].lower():
                     magnets.append(magnet.get('href'))
             except:
-                    pass
+                pass
     for x in url_f:
         urls.append(x)
 
 def idope(search):
     url_f=[]
     req_url="https://idope.se/torrent-list/"+str(search)+"/"
-    res=requests.get(req_url,headers={
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0'
-    })
+    try:
+        res=requests.get(req_url,headers={
+            'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0'
+        })
+    except:
+        print("\nERROR in accessing idope: Please Use VPN or Proxy\n")
+        return
     soup=BeautifulSoup(res.content,features='html.parser')
     link_con=0
     for link in soup.find_all('a'):
@@ -102,5 +110,4 @@ while(1):
     print("Magnet Link:\n"+df["Magnets"][0])
     copyToClipBoard(df["Magnets"][0])
     print("Magnet Copied to ClipBoard")
-    print("Press Ctrl+C to Close")
-
+    print("Press Ctrl+C to Close\n")
