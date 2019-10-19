@@ -2,11 +2,10 @@ print("Initializing....")
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-import os
+import pyperclip
 
 def copyToClipBoard(text):
-    command = 'echo ' + text.strip() + '| clip'
-    os.system(command)
+    pyperclip.copy(text)
 
 def _1337x(search):
     url_f=[]
