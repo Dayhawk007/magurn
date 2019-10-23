@@ -12,8 +12,8 @@ def _1337x(search):
     search_l=search.split()
     search_name="+".join(search_l)
 
-    req_url="https://1337x.unblocked.ltda/search/"+str(search_name)+"/1/"
-    # req_url="https://1337x.to/search/"+str(search_name)+"/1/"
+    # req_url="https://1337x.unblocked.ltda/search/"+str(search_name)+"/1/"
+    req_url="https://1337x.to/search/"+str(search_name)+"/1/"
     try:
         res=requests.get(req_url,headers={
             'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0'
@@ -38,8 +38,8 @@ def _1337x(search):
                 srch_vrf+=1
         if srch_vrf < len(search.lower().split()):
             continue
-        url_f.append("https://1337x.unblocked.ltda"+link.get('href'))
-        # url_f.append("https://1337x.to"+link.get('href'))
+        # url_f.append("https://1337x.unblocked.ltda"+link.get('href'))
+        url_f.append("https://1337x.to"+link.get('href'))
         names.append(link.text.strip())
 
         size = row.find('td', attrs = {'class':'size'})
