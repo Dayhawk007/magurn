@@ -131,14 +131,31 @@ while(1):
         print("Nothing Found")
         continue 
 
+    # Convert Sizes in MB
+    size_in_mb=[]
+    for sizedata in sizes:
+        sizesplit = sizedata.split()
+        size = float(sizesplit[0])
+        type_size = sizesplit[1]
+        if(type_size == 'B'): size_mb = size/(1024*1024)
+        if(type_size == 'KB'): size_mb = size/1024
+        if(type_size == 'MB'): size_mb = size
+        if(type_size == 'GB'): size_mb = size*1024
+        if(type_size == 'TB'): size_mb = size*1024*1024
+        size_in_mb.append(size_mb)
+
     tor_seed["Names"]=names
     tor_seed["Sizes"]=sizes
+    tor_seed["SizesMB"]=size_in_mb
     tor_seed["Links"]=urls
     tor_seed["Seeders"]=seeds
     tor_seed["Magnets"]=magnets
 
     df=pd.DataFrame(tor_seed)
-    df.sort_values('Seeders')
+
+    #Calculate Scores to determine better torrent by calculating Seeders/Size
+    df['Score'] = df.apply(lambda row: row.Seeders / row.SizesMB, axis=1) 
+    df=df.sort_values('Score', ascending=False).reset_index(drop=True)
 
     print("Name: "+df["Names"][0])
     print("Size: "+df["Sizes"][0])
