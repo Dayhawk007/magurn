@@ -6,7 +6,7 @@
 
 Requirements-
 ```
-pip install requests bs4 pandas
+pip install requests bs4 pandas pyperclip
 ```
 
 - If torrent sites are blocked in your region use a VPN or Proxy else the application won't work.
