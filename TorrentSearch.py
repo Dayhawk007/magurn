@@ -9,21 +9,20 @@ def copyToClipBoard(text):
     pyperclip.copy(text)
 
 
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
+}
+
+
 def _1337x(search):
     url_f = []
     search_l = search.split()
     search_name = "+".join(search_l)
 
     base_url = "https://1337x.to"
-    # base_url = "https://1337x.unblocked.ltda"
     req_url = base_url + "/search/" + str(search_name) + "/1/"
     try:
-        res = requests.get(
-            req_url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
-            },
-        )
+        res = requests.get(req_url, headers=headers)
     except:
         print("\nERROR in accessing 1337x: Please Use VPN or Proxy\n")
         return
@@ -52,12 +51,7 @@ def _1337x(search):
             break
 
     for url in url_f:
-        url_res = requests.get(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
-            },
-        )
+        url_res = requests.get(url, headers=headers)
         urlsoup = BeautifulSoup(url_res.content, features="html.parser")
         for seed in urlsoup.find_all("span", {"class": "seeds"}):
             seeds.append(int(seed.text))
@@ -75,12 +69,7 @@ def idope(search):
     base_url = "https://idope.se"
     req_url = base_url + "/torrent-list/" + str(search) + "/"
     try:
-        res = requests.get(
-            req_url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
-            },
-        )
+        res = requests.get(req_url, headers=headers)
     except:
         print("\nERROR in accessing idope: Please Use VPN or Proxy\n")
         return
@@ -108,12 +97,7 @@ def idope(search):
             break
 
     for url in url_f:
-        url_res = requests.get(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
-            },
-        )
+        url_res = requests.get(url, headers=headers)
         urlsoup = BeautifulSoup(url_res.content, features="html.parser")
         for magnet in urlsoup.find_all(id="mangetinfo"):
             magnets.append(magnet.text.strip())
@@ -124,12 +108,7 @@ def piratebay(search):
     base_url = "https://247prox.link"
     req_url = base_url + "/search/" + search
     try:
-        res = requests.get(
-            req_url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
-            },
-        )
+        res = requests.get(req_url, headers=headers)
     except:
         print("\nERROR in accessing PirateBay: Please Use VPN or Proxy\n")
         return
@@ -165,12 +144,7 @@ def piratebay(search):
             break
 
     for url in url_f:
-        url_res = requests.get(
-            url,
-            headers={
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
-            },
-        )
+        url_res = requests.get(url, headers=headers)
         urlsoup = BeautifulSoup(url_res.content, features="html.parser")
         div = urlsoup.find("div", attrs={"class": "download"})
 
