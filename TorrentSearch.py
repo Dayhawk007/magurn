@@ -14,8 +14,9 @@ def _1337x(search):
     search_l = search.split()
     search_name = "+".join(search_l)
 
-    # req_url="https://1337x.unblocked.ltda/search/"+str(search_name)+"/1/"
-    req_url = "https://1337x.to/search/" + str(search_name) + "/1/"
+    base_url = "https://1337x.to"
+    # base_url = "https://1337x.unblocked.ltda"
+    req_url = base_url + "/search/" + str(search_name) + "/1/"
     try:
         res = requests.get(
             req_url,
@@ -27,7 +28,6 @@ def _1337x(search):
         print("\nERROR in accessing 1337x: Please Use VPN or Proxy\n")
         return
     soup = BeautifulSoup(res.content, features="html.parser")
-    # print(soup.prettify())
     c = False
     data_cnt = 0
     for row in soup.find_all("tr"):
@@ -37,14 +37,11 @@ def _1337x(search):
 
         link_data = row.find_all("a")
         link = link_data[1]
-        srch_vrf = 0
-        for nt in search.lower().split():
-            if nt in link.text.lower():
-                srch_vrf += 1
-        if srch_vrf < len(search.lower().split()):
+
+        if not check(search, link):
             continue
-        # url_f.append("https://1337x.unblocked.ltda"+link.get('href'))
-        url_f.append("https://1337x.to" + link.get("href"))
+
+        url_f.append(base_url + link.get("href"))
         names.append(link.text.strip())
 
         size = row.find("td", attrs={"class": "size"})
@@ -71,14 +68,12 @@ def _1337x(search):
                     magnets.append(magnet.get("href"))
             except:
                 pass
-    for x in url_f:
-        urls.append(x)
 
 
 def idope(search):
     url_f = []
-
-    req_url = "https://idope.se/torrent-list/" + str(search) + "/"
+    base_url = "https://idope.se"
+    req_url = base_url + "/torrent-list/" + str(search) + "/"
     try:
         res = requests.get(
             req_url,
@@ -94,15 +89,12 @@ def idope(search):
 
     data_cnt = 0
     for div in soup.find_all("div", attrs={"class": "resultdiv"}):
-        srch_vrf = 0
         link = div.find("a")
-        for nt in search.lower().split():
-            if nt in link.text.lower():
-                srch_vrf += 1
-        if srch_vrf < len(search.lower().split()):
+
+        if not check(search, link):
             continue
 
-        url_f.append("https://idope.se" + link.get("href"))
+        url_f.append(base_url + link.get("href"))
         names.append(link.text.strip())
 
         seed = div.find("div", {"class": "resultdivbottonseed"})
@@ -123,17 +115,82 @@ def idope(search):
             },
         )
         urlsoup = BeautifulSoup(url_res.content, features="html.parser")
-        for magnet in urlsoup.find_all("a", {"id": "mangetinfo"}):
+        for magnet in urlsoup.find_all(id="mangetinfo"):
             magnets.append(magnet.text.strip())
 
-    for x in url_f:
-        urls.append(x)
+
+def piratebay(search):
+    url_f = []
+    base_url = "https://247prox.link"
+    req_url = base_url + "/search/" + search
+    try:
+        res = requests.get(
+            req_url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
+            },
+        )
+    except:
+        print("\nERROR in accessing PirateBay: Please Use VPN or Proxy\n")
+        return
+
+    soup = BeautifulSoup(res.content, features="html.parser")
+    data_count = 0
+    c = False
+    for tr in soup.find_all("tr"):
+        if not c:
+            c = True
+            continue
+
+        link = tr.div.a
+
+        if not check(search, link):
+            continue
+
+        names.append(link.text.strip())
+
+        url_f.append(str(base_url + link.get("href")))
+
+        size_data = tr.font.text.split(",")[1].strip()
+        size_value = size_data.split()[1]
+        size_type = size_data.split()[2].replace("i", "")
+        size = str(size_value + " " + size_type)
+        sizes.append(size)
+
+        td = tr.find_all("td")
+        seeds.append(int(td[-2].text))
+
+        data_count += 1
+        if data_count == 2:
+            break
+
+    for url in url_f:
+        url_res = requests.get(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
+            },
+        )
+        urlsoup = BeautifulSoup(url_res.content, features="html.parser")
+        div = urlsoup.find("div", attrs={"class": "download"})
+
+        magnets.append(div.a.get("href"))
+
+
+def check(search, link):
+    srch_vrf = 0
+    for nt in search.lower().split():
+        if nt in link.text.lower():
+            srch_vrf += 1
+    if srch_vrf < len(search.lower().split()):
+        return False
+    else:
+        return True
 
 
 while 1:
     tor_seed = {}
     names = []
-    urls = []
     seeds = []
     magnets = []
     sizes = []
@@ -146,8 +203,11 @@ while 1:
     print("Scraping from 1337x....")
     _1337x(searchterm)
 
+    print("Scraping from PirateBay....")
+    piratebay(searchterm)
+
     if not len(names):
-        print("Nothing Found")
+        print("\nNothing Found\n")
         continue
 
     # Convert Sizes in MB
@@ -171,7 +231,6 @@ while 1:
     tor_seed["Names"] = names
     tor_seed["Sizes"] = sizes
     tor_seed["SizesMB"] = size_in_mb
-    tor_seed["Links"] = urls
     tor_seed["Seeders"] = seeds
     tor_seed["Magnets"] = magnets
 
@@ -180,6 +239,7 @@ while 1:
     # Calculate Scores to determine better torrent by calculating Seeders/Size
     df["Score"] = df.apply(lambda row: row.Seeders / row.SizesMB, axis=1)
     df = df.sort_values("Score", ascending=False).reset_index(drop=True)
+    # print(df)
 
     print("Name: " + df["Names"][0])
     print("Size: " + df["Sizes"][0])
