@@ -19,7 +19,8 @@ def _1337x(search):
     search_l = search.split()
     search_name = "+".join(search_l)
 
-    base_url = "https://1337x.to"
+    # base_url = "https://1337x.to"
+    base_url = "https://1337xto.eu" #PROXIED URL
     req_url = base_url + "/search/" + str(search_name) + "/1/"
     try:
         res = requests.get(req_url, headers=headers)
@@ -66,7 +67,8 @@ def _1337x(search):
 
 def idope(search):
     url_f = []
-    base_url = "https://idope.se"
+    # base_url = "https://idope.se"
+    base_url = "https://gv6zipaqcoaau4qe.onio.icu" #PROXIED URL
     req_url = base_url + "/torrent-list/" + str(search) + "/"
     try:
         res = requests.get(req_url, headers=headers)
@@ -105,7 +107,8 @@ def idope(search):
 
 def piratebay(search):
     url_f = []
-    base_url = "https://247prox.link"
+    # base_url = "https://thepiratebay.org"
+    base_url = "https://247prox.link" #PROXIED URL
     req_url = base_url + "/search/" + search
     try:
         res = requests.get(req_url, headers=headers)
