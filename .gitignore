@@ -2,3 +2,4 @@
 *.spec
 *cache*
 build
+*extra*
