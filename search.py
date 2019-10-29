@@ -1,11 +1,14 @@
 import requests
 from bs4 import BeautifulSoup
-from config import *
+
 import proxy
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
 }
+
+piratebay_proxy_url = proxy.get_piratebay_proxy_url()
+# print(piratebay_proxy_url)
 
 
 def check(search, link):
@@ -114,7 +117,7 @@ def piratebay(search):
     url_f = []
     # base_url = "https://thepiratebay.org"
     base_url = "https://247prox.link"  # PROXIED URL
-    # base_url = proxy.get_piratebay_proxy_url()  # Takes about 5 seconds
+    # base_url = piratebay_proxy_url
 
     req_url = base_url + "/search/" + search
     try:
@@ -156,6 +159,9 @@ def piratebay(search):
     for url in url_f:
         url_res = requests.get(url, headers=headers)
         urlsoup = BeautifulSoup(url_res.content, features="html.parser")
+
+        uploaded.append(urlsoup.find_all('dd')[-6].text.split()[0])
+
         div = urlsoup.find("div", attrs={"class": "download"})
 
         magnets.append(div.a.get("href"))

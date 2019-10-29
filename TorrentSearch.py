@@ -2,7 +2,6 @@ import pyperclip
 import pandas as pd
 from bs4 import BeautifulSoup
 import requests
-from config import *
 import search
 
 print("Initializing....")
@@ -18,13 +17,20 @@ headers = {
 
 
 while 1:
+    tor_seed = {}
+    names = []
+    seeds = []
+    magnets = []
+    sizes = []
+    uploaded = []
+
     searchterm = input("Enter the name of torrent you want to search\n")
 
-    print("Scraping from idope....")
-    search.idope(searchterm)
+    # print("Scraping from idope....")
+    # search.idope(searchterm)
 
-    print("Scraping from 1337x....")
-    search._1337x(searchterm)
+    # print("Scraping from 1337x....")
+    # search._1337x(searchterm)
 
     print("Scraping from PirateBay....")
     search.piratebay(searchterm)
@@ -53,8 +59,9 @@ while 1:
 
     tor_seed["Names"] = names
     tor_seed["Sizes"] = sizes
-    tor_seed["SizesMB"] = size_in_mb
     tor_seed["Seeders"] = seeds
+    tor_seed["Uploaded"] = uploaded
+    tor_seed["SizesMB"] = size_in_mb
     tor_seed["Magnets"] = magnets
 
     df = pd.DataFrame(tor_seed)
@@ -62,7 +69,7 @@ while 1:
     # Calculate Scores to determine better torrent by calculating Seeders/Size
     df["Score"] = df.apply(lambda row: row.Seeders / row.SizesMB, axis=1)
     df = df.sort_values("Score", ascending=False).reset_index(drop=True)
-    # print(df)
+    print(df)
 
     print("Name: " + df["Names"][0])
     print("Size: " + df["Sizes"][0])
