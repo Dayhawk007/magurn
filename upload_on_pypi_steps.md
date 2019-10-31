@@ -1,8 +1,8 @@
-pip uninstall magurn
-y
-python setup.py sdist bdist_wheel
-twine upload  --repository-url https://upload.pypi.org/legacy/ dist/*
-<username>
-<password>
-pip install magurn
-magurn
+* pip uninstall magurn
+* y
+* python setup.py sdist bdist_wheel
+* twine upload  --repository-url https://upload.pypi.org/legacy/ dist/*
+* <username>
+* <password>
+* pip install magurn
+* magurn
