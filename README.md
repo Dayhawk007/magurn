@@ -9,4 +9,9 @@ Requirements-
 pip install requests bs4 pyperclip
 ```
 
+* To run hosted module
+```
+pip install magurn
+```
+
 - If torrent sites are blocked in your region use a VPN or Proxy else the application won't work.

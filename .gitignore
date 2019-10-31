@@ -4,3 +4,5 @@
 build
 *extra*
 magurn.egg-info
+*test*
+dist/
