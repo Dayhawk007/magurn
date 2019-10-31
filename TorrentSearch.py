@@ -1,8 +1,10 @@
-print("Initializing....")
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
 import pyperclip
+import pandas as pd
+from bs4 import BeautifulSoup
+import requests
+import proxy
+
+print("Initializing....")
 
 
 def copyToClipBoard(text):
@@ -13,13 +15,28 @@ headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
 }
 
+# Takes about 5 seconds to get proxy url
+# piratebay_proxy_base_url = proxy.get_piratebay_proxy_url()
+
+
+def check(search, link):
+    srch_vrf = 0
+    for nt in search.lower().split():
+        if nt in link.text.lower():
+            srch_vrf += 1
+    if srch_vrf < len(search.lower().split()):
+        return False
+    else:
+        return True
+
 
 def _1337x(search):
     url_f = []
     search_l = search.split()
     search_name = "+".join(search_l)
 
-    base_url = "https://1337x.to"
+    # base_url = "https://1337x.to"
+    base_url = "https://1337xto.eu"  # PROXIED URL
     req_url = base_url + "/search/" + str(search_name) + "/1/"
     try:
         res = requests.get(req_url, headers=headers)
@@ -42,6 +59,8 @@ def _1337x(search):
 
         url_f.append(base_url + link.get("href"))
         names.append(link.text.strip())
+
+        uploaded.append(row.find('td', attrs={'class': 'coll-date'}).text)
 
         size = row.find("td", attrs={"class": "size"})
         sizes.append(size.find(text=True))
@@ -66,7 +85,8 @@ def _1337x(search):
 
 def idope(search):
     url_f = []
-    base_url = "https://idope.se"
+    # base_url = "https://idope.se"
+    base_url = "https://gv6zipaqcoaau4qe.onio.icu"  # PROXIED URL
     req_url = base_url + "/torrent-list/" + str(search) + "/"
     try:
         res = requests.get(req_url, headers=headers)
@@ -83,6 +103,8 @@ def idope(search):
         if not check(search, link):
             continue
 
+        uploaded.append(
+            str(div.find('div', attrs={'class': 'resultdivbottontime'}).text) + " Ago")
         url_f.append(base_url + link.get("href"))
         names.append(link.text.strip())
 
@@ -105,7 +127,10 @@ def idope(search):
 
 def piratebay(search):
     url_f = []
-    base_url = "https://247prox.link"
+    # base_url = "https://thepiratebay.org"
+    base_url = "https://247prox.link"  # PROXIED URL
+    # base_url = piratebay_proxy_base_url
+
     req_url = base_url + "/search/" + search
     try:
         res = requests.get(req_url, headers=headers)
@@ -146,20 +171,12 @@ def piratebay(search):
     for url in url_f:
         url_res = requests.get(url, headers=headers)
         urlsoup = BeautifulSoup(url_res.content, features="html.parser")
+
+        uploaded.append(urlsoup.find_all('dd')[-6].text.split()[0])
+
         div = urlsoup.find("div", attrs={"class": "download"})
 
         magnets.append(div.a.get("href"))
-
-
-def check(search, link):
-    srch_vrf = 0
-    for nt in search.lower().split():
-        if nt in link.text.lower():
-            srch_vrf += 1
-    if srch_vrf < len(search.lower().split()):
-        return False
-    else:
-        return True
 
 
 while 1:
@@ -168,6 +185,7 @@ while 1:
     seeds = []
     magnets = []
     sizes = []
+    uploaded = []
 
     searchterm = input("Enter the name of torrent you want to search\n")
 
@@ -204,8 +222,9 @@ while 1:
 
     tor_seed["Names"] = names
     tor_seed["Sizes"] = sizes
-    tor_seed["SizesMB"] = size_in_mb
     tor_seed["Seeders"] = seeds
+    tor_seed["Uploaded"] = uploaded
+    tor_seed["SizesMB"] = size_in_mb
     tor_seed["Magnets"] = magnets
 
     df = pd.DataFrame(tor_seed)
@@ -218,6 +237,7 @@ while 1:
     print("Name: " + df["Names"][0])
     print("Size: " + df["Sizes"][0])
     print("Seeds:", df["Seeders"][0])
+    print("Uploaded:", df["Uploaded"][0])
     print("Magnet Link:\n" + df["Magnets"][0])
     copyToClipBoard(df["Magnets"][0])
     print("Magnet Copied to ClipBoard")

@@ -1,5 +1,5 @@
 .vscode/
-env
 *.spec
 *cache*
 build
+*extra*
