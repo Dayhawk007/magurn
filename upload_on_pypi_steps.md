@@ -2,7 +2,7 @@
 * y
 * python setup.py sdist bdist_wheel
 * twine upload  --repository-url https://upload.pypi.org/legacy/ dist/*
-* <username>
-* <password>
+* username
+* password
 * pip install magurn
 * magurn
