@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='magurn',
-    version='1.0.0',
+    version='1.1.0',
     authors=["Ayush Chandwani", "Shivam Garg"],
     description="A Torrent Search Client",
     long_description=long_description,

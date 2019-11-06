@@ -1,7 +1,7 @@
 import pyperclip
 from bs4 import BeautifulSoup
 import requests
-from . import proxy
+# import magurn.proxy as proxy
 
 print("Initializing....")
 
@@ -36,7 +36,7 @@ def _1337x(search):
 
     # base_url = "https://1337x.to"
     base_url = "https://1337xto.eu"  # PROXIED URL
-    req_url = base_url + "/search/" + str(search_name) + "/1/"
+    req_url = base_url + "/sort-search/" + str(search_name) + "/time/desc/1/"
     try:
         res = requests.get(req_url, headers=headers)
     except:
@@ -86,7 +86,7 @@ def idope(search):
     url_f = []
     # base_url = "https://idope.se"
     base_url = "https://gv6zipaqcoaau4qe.onio.icu"  # PROXIED URL
-    req_url = base_url + "/torrent-list/" + str(search) + "/"
+    req_url = base_url + "/torrent-list/" + str(search) + "/?&o=-3"
     try:
         res = requests.get(req_url, headers=headers)
     except:
@@ -130,7 +130,7 @@ def piratebay(search):
     base_url = "https://247prox.link"  # PROXIED URL
     # base_url = piratebay_proxy_base_url
 
-    req_url = base_url + "/search/" + search
+    req_url = base_url + "/search/" + search + "/0/3/0"
     try:
         res = requests.get(req_url, headers=headers)
     except:
