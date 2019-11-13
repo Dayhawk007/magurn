@@ -44,7 +44,7 @@ def _1337x(search):
         return
     soup = BeautifulSoup(res.content, features="html.parser")
     c = False
-    data_cnt = 0
+    data_count = 0
     for row in soup.find_all("tr"):
         if not c:
             c = True
@@ -56,6 +56,13 @@ def _1337x(search):
         if not check(search, link):
             continue
 
+        seed = int(row.find('td', attrs={'class': 'coll-2'}).text)
+
+        if seed < 10:  # Seeds should be greater than/equal to 10
+            continue
+
+        seeds.append(seed)
+
         url_f.append(base_url + link.get("href"))
         names.append(link.text.strip())
 
@@ -64,15 +71,13 @@ def _1337x(search):
         size = row.find("td", attrs={"class": "size"})
         sizes.append(size.find(text=True))
 
-        data_cnt += 1
-        if data_cnt == 2:
+        data_count += 1
+        if data_count == 2:
             break
 
     for url in url_f:
         url_res = requests.get(url, headers=headers)
         urlsoup = BeautifulSoup(url_res.content, features="html.parser")
-        for seed in urlsoup.find_all("span", {"class": "seeds"}):
-            seeds.append(int(seed.text))
 
         for magnet in urlsoup.find_all("a"):
             try:
@@ -80,6 +85,9 @@ def _1337x(search):
                     magnets.append(magnet.get("href"))
             except:
                 pass
+
+    if not data_count:
+        print("Nothing Found on 1337x")
 
 
 def idope(search):
@@ -95,11 +103,16 @@ def idope(search):
 
     soup = BeautifulSoup(res.content, features="html.parser")
 
-    data_cnt = 0
+    data_count = 0
     for div in soup.find_all("div", attrs={"class": "resultdiv"}):
         link = div.find("a")
 
         if not check(search, link):
+            continue
+
+        seed = div.find("div", {"class": "resultdivbottonseed"})
+
+        if int(seed.text) < 10:  # Seeds should be greater than/equal to 10
             continue
 
         uploaded.append(
@@ -107,14 +120,13 @@ def idope(search):
         url_f.append(base_url + link.get("href"))
         names.append(link.text.strip())
 
-        seed = div.find("div", {"class": "resultdivbottonseed"})
         seeds.append(int(seed.text))
 
         size = div.find("div", {"class": "resultdivbottonlength"})
         sizes.append(size.text.strip().replace(u"\xa0", u" "))
 
-        data_cnt += 1
-        if data_cnt == 2:
+        data_count += 1
+        if data_count == 2:
             break
 
     for url in url_f:
@@ -122,6 +134,9 @@ def idope(search):
         urlsoup = BeautifulSoup(url_res.content, features="html.parser")
         for magnet in urlsoup.find_all(id="mangetinfo"):
             magnets.append(magnet.text.strip())
+
+    if not data_count:
+        print("Nothing Found on idope")
 
 
 def piratebay(search):
@@ -150,6 +165,11 @@ def piratebay(search):
         if not check(search, link):
             continue
 
+        td = tr.find_all("td")
+
+        if int(td[-2].text) < 10:  # Seeds should be greater than/equal to 10
+            continue
+
         names.append(link.text.strip())
 
         url_f.append(str(base_url + link.get("href")))
@@ -160,7 +180,6 @@ def piratebay(search):
         size = str(size_value + " " + size_type)
         sizes.append(size)
 
-        td = tr.find_all("td")
         seeds.append(int(td[-2].text))
 
         data_count += 1
@@ -176,6 +195,9 @@ def piratebay(search):
         div = urlsoup.find("div", attrs={"class": "download"})
 
         magnets.append(div.a.get("href"))
+
+    if not data_count:
+        print("Nothing Found on Piratebay")
 
 
 while 1:
@@ -198,7 +220,7 @@ while 1:
     piratebay(searchterm)
 
     if not len(names):
-        print("\nNothing Found\n")
+        print("\nERROR: Nothing Found. Please check the spelling\n")
         continue
 
     # Convert Sizes in MB
