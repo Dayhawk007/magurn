@@ -3,7 +3,10 @@ from bs4 import BeautifulSoup
 import requests
 # import magurn.proxy as proxy
 
-print("Initializing....")
+from colorama import init, Fore, Back, Style
+init(autoreset=True)
+
+print(Fore.GREEN + "Initializing....")
 
 
 def copyToClipBoard(text):
@@ -13,6 +16,8 @@ def copyToClipBoard(text):
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"
 }
+
+min_seeds = 5
 
 # Takes about 5 seconds to get proxy url
 # piratebay_proxy_base_url = proxy.get_piratebay_proxy_url()
@@ -40,7 +45,7 @@ def _1337x(search):
     try:
         res = requests.get(req_url, headers=headers)
     except:
-        print("\nERROR in accessing 1337x: Please Use VPN or Proxy\n")
+        print(Fore.RED + "ERROR in accessing 1337x: Please Use VPN or Proxy")
         return
     soup = BeautifulSoup(res.content, features="html.parser")
     c = False
@@ -58,7 +63,7 @@ def _1337x(search):
 
         seed = int(row.find('td', attrs={'class': 'coll-2'}).text)
 
-        if seed < 10:  # Seeds should be greater than/equal to 10
+        if seed < min_seeds:  # Seeds should be greater than/equal to min_seeds
             continue
 
         seeds.append(seed)
@@ -87,7 +92,7 @@ def _1337x(search):
                 pass
 
     if not data_count:
-        print("Nothing Found on 1337x")
+        print(Fore.RED + "Nothing Found on 1337x")
 
 
 def idope(search):
@@ -98,7 +103,7 @@ def idope(search):
     try:
         res = requests.get(req_url, headers=headers)
     except:
-        print("\nERROR in accessing idope: Please Use VPN or Proxy\n")
+        print(Fore.RED + "ERROR in accessing idope: Please Use VPN or Proxy")
         return
 
     soup = BeautifulSoup(res.content, features="html.parser")
@@ -112,7 +117,7 @@ def idope(search):
 
         seed = div.find("div", {"class": "resultdivbottonseed"})
 
-        if int(seed.text) < 10:  # Seeds should be greater than/equal to 10
+        if int(seed.text) < min_seeds:  # Seeds should be greater than/equal to min_seeds
             continue
 
         uploaded.append(
@@ -136,7 +141,7 @@ def idope(search):
             magnets.append(magnet.text.strip())
 
     if not data_count:
-        print("Nothing Found on idope")
+        print(Fore.RED + "Nothing Found on idope")
 
 
 def piratebay(search):
@@ -149,7 +154,7 @@ def piratebay(search):
     try:
         res = requests.get(req_url, headers=headers)
     except:
-        print("\nERROR in accessing PirateBay: Please Use VPN or Proxy\n")
+        print(Fore.RED + "ERROR in accessing PirateBay: Please Use VPN or Proxy")
         return
 
     soup = BeautifulSoup(res.content, features="html.parser")
@@ -167,7 +172,7 @@ def piratebay(search):
 
         td = tr.find_all("td")
 
-        if int(td[-2].text) < 10:  # Seeds should be greater than/equal to 10
+        if int(td[-2].text) < min_seeds:  # Seeds should be greater than/equal to min_seeds
             continue
 
         names.append(link.text.strip())
@@ -197,7 +202,7 @@ def piratebay(search):
         magnets.append(div.a.get("href"))
 
     if not data_count:
-        print("Nothing Found on Piratebay")
+        print(Fore.RED + "Nothing Found on Piratebay")
 
 
 while 1:
@@ -220,7 +225,7 @@ while 1:
     piratebay(searchterm)
 
     if not len(names):
-        print("\nERROR: Nothing Found. Please check the spelling\n")
+        print(Fore.RED + Style.BRIGHT + "\nERROR: Nothing Found. Please check the spelling\n")
         continue
 
     # Convert Sizes in MB
@@ -255,14 +260,14 @@ while 1:
 
     maxIndex = score.index(max(score))
 
-    print("Name: " + tor_seed["Names"][maxIndex])
-    print("Size: " + tor_seed["Sizes"][maxIndex])
-    print("Seeds:", tor_seed["Seeders"][maxIndex])
-    print("Uploaded:", tor_seed["Uploaded"][maxIndex])
-    print("Magnet Link:\n" + tor_seed["Magnets"][maxIndex])
+    print(Fore.MAGENTA + "Name: " + Style.BRIGHT + tor_seed["Names"][maxIndex])
+    print(Fore.MAGENTA + "Size: " + Style.BRIGHT + tor_seed["Sizes"][maxIndex])
+    print(Fore.MAGENTA + "Seeds: " + Style.BRIGHT + str(tor_seed["Seeders"][maxIndex]))
+    print(Fore.MAGENTA + "Uploaded: " + Style.BRIGHT + tor_seed["Uploaded"][maxIndex])
+    print(Fore.BLUE + "Magnet Link:\n" + Style.BRIGHT + tor_seed["Magnets"][maxIndex])
     try:
         copyToClipBoard(tor_seed["Magnets"][maxIndex])
-        print("Magnet Copied to ClipBoard")
+        print(Fore.GREEN + "Magnet Copied to ClipBoard")
     except:
         pass
     print("\nPress Ctrl+C to Close\n")

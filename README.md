@@ -6,7 +6,7 @@
 
 Requirements-
 ```sh
-pip install requests bs4 pyperclip
+pip install requests bs4 pyperclip colorama
 ```
 
 * To install hosted pip module
