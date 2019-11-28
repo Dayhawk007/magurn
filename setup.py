@@ -2,9 +2,11 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+ver = "1.3.0"
+
 setuptools.setup(
     name='magurn',
-    version='1.3.0',
+    version=ver,
     authors=["Ayush Chandwani", "Shivam Garg"],
     description="A Torrent Search Client",
     long_description=long_description,

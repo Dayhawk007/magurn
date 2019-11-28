@@ -40,7 +40,7 @@ def _1337x(search):
     search_name = "+".join(search_l)
 
     # base_url = "https://1337x.to"
-    base_url = "https://1337xto.eu"  # PROXIED URL
+    base_url = "https://1337x.wtf"  # PROXIED URL
     req_url = base_url + "/sort-search/" + str(search_name) + "/time/desc/1/"
     try:
         res = requests.get(req_url, headers=headers)
@@ -225,7 +225,8 @@ while 1:
     piratebay(searchterm)
 
     if not len(names):
-        print(Fore.RED + Style.BRIGHT + "\nERROR: Nothing Found. Please check the spelling\n")
+        print(Fore.RED + Style.BRIGHT +
+              "\nERROR: Nothing Found. Please check the spelling\n")
         continue
 
     # Convert Sizes in MB
@@ -262,9 +263,12 @@ while 1:
 
     print(Fore.MAGENTA + "Name: " + Style.BRIGHT + tor_seed["Names"][maxIndex])
     print(Fore.MAGENTA + "Size: " + Style.BRIGHT + tor_seed["Sizes"][maxIndex])
-    print(Fore.MAGENTA + "Seeds: " + Style.BRIGHT + str(tor_seed["Seeders"][maxIndex]))
-    print(Fore.MAGENTA + "Uploaded: " + Style.BRIGHT + tor_seed["Uploaded"][maxIndex])
-    print(Fore.BLUE + "Magnet Link:\n" + Style.BRIGHT + tor_seed["Magnets"][maxIndex])
+    print(Fore.MAGENTA + "Seeds: " + Style.BRIGHT +
+          str(tor_seed["Seeders"][maxIndex]))
+    print(Fore.MAGENTA + "Uploaded: " + Style.BRIGHT +
+          tor_seed["Uploaded"][maxIndex])
+    print(Fore.BLUE + "Magnet Link:\n" +
+          Style.BRIGHT + tor_seed["Magnets"][maxIndex])
     try:
         copyToClipBoard(tor_seed["Magnets"][maxIndex])
         print(Fore.GREEN + "Magnet Copied to ClipBoard")
