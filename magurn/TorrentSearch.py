@@ -233,7 +233,8 @@ while 1:
     size_in_mb = []
     for sizedata in sizes:
         sizesplit = sizedata.split()
-        size = float(sizesplit[0])
+        size_without_comma = sizesplit[0].replace(',', '')
+        size = float(size_without_comma)
         type_size = sizesplit[1]
         if type_size == "B":
             size_mb = size / (1024 * 1024)
@@ -258,6 +259,8 @@ while 1:
     tor_seed["SizesMB"] = size_in_mb
     tor_seed["Magnets"] = magnets
     tor_seed["Score"] = score
+
+    # print(tor_seed)
 
     maxIndex = score.index(max(score))
 
