@@ -40,7 +40,8 @@ def _1337x(search):
     search_name = "+".join(search_l)
 
     # base_url = "https://1337x.to"
-    base_url = "https://1337x.wtf"  # PROXIED URL
+    # base_url = "https://1337x.wtf"  # PROXIED URL
+    base_url = "https://x1337.info"  # PROXIED URL
     req_url = base_url + "/sort-search/" + str(search_name) + "/time/desc/1/"
     try:
         res = requests.get(req_url, headers=headers)
@@ -48,6 +49,7 @@ def _1337x(search):
         print(Fore.RED + "ERROR in accessing 1337x: Please Use VPN or Proxy")
         return
     soup = BeautifulSoup(res.content, features="html.parser")
+    # print(soup.prettify())
     c = False
     data_count = 0
     for row in soup.find_all("tr"):
