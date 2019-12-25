@@ -2,7 +2,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-ver = "2.0.0"
+ver = "2.1.0"
 
 setuptools.setup(
     name='magurn',

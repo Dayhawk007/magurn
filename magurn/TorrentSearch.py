@@ -196,12 +196,17 @@ def getMagnet(origin, link):
     url_res = requests.get(link, headers=headers)
     urlsoup = BeautifulSoup(url_res.content, features="html.parser")
     # print(urlsoup.prettify())
-    if origin=='1337x':
-        return urlsoup.find('a', attrs={'class': 'leab53b8068c0a628e11a907243961498a431c3f3 lb8818a071d284a7b8b1fc267080df6950674c626 l04e159a1db97662974f8701afa276351269fd59d'}).get('href')
-    
+    if origin == '1337x':
+        div = urlsoup.find('div', attrs={'class': 'row'})
+        for a in div.find_all('a'):
+            a = a.get('href')
+            if 'magnet' in a:
+                magnet = a
+                return magnet
+
     elif origin == 'idope':
         # print(urlsoup.prettify())
-        magnet = urlsoup.find('a', {'id':"mangetinfo"}).get('href')
+        magnet = urlsoup.find('a', {'id': "mangetinfo"}).get('href')
         return magnet
 
     elif origin == 'piratebay':
@@ -212,7 +217,7 @@ def getMagnet(origin, link):
 while 1:
     tor_seed = {}
     origin = []
-    links=[]
+    links = []
     names = []
     seeds = []
     # magnets = []
@@ -272,15 +277,16 @@ while 1:
 
     maxIndex = score.index(max(score))
 
-    magnet = getMagnet(tor_seed['Origin'][maxIndex], tor_seed['Links'][maxIndex])
-
+    magnet = getMagnet(tor_seed['Origin'][maxIndex],
+                       tor_seed['Links'][maxIndex])
     print(Fore.MAGENTA + "Name: " + Style.BRIGHT + tor_seed["Names"][maxIndex])
     print(Fore.MAGENTA + "Size: " + Style.BRIGHT + tor_seed["Sizes"][maxIndex])
     print(Fore.MAGENTA + "Seeds: " + Style.BRIGHT +
           str(tor_seed["Seeders"][maxIndex]))
     print(Fore.MAGENTA + "Uploaded: " + Style.BRIGHT +
           tor_seed["Uploaded"][maxIndex])
-    print(Fore.BLUE + 'Torrent Link: ' + Style.BRIGHT + tor_seed['Links'][maxIndex])
+    print(Fore.BLUE + 'Torrent Link: ' +
+          Style.BRIGHT + tor_seed['Links'][maxIndex])
     print(Fore.BLUE + "Magnet Link:\n" + Style.BRIGHT + magnet)
     try:
         copyToClipBoard(magnet)
