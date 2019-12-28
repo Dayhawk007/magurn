@@ -138,7 +138,7 @@ def idope(search):
 def piratebay(search):
     # url_f = []
     # base_url = "https://thepiratebay.org"
-    base_url = "https://247prox.link"  # PROXIED URL
+    base_url = "https://247prox.in"  # PROXIED URL
     # base_url = piratebay_proxy_base_url
 
     req_url = base_url + "/search/" + search + "/0/3/0"
@@ -193,7 +193,11 @@ def piratebay(search):
 
 
 def getMagnet(origin, link):
-    url_res = requests.get(link, headers=headers)
+    try:
+        url_res = requests.get(link, headers=headers)
+    except:
+        print(Fore.RED + 'ERROR in fetching magnet link')
+        return
     urlsoup = BeautifulSoup(url_res.content, features="html.parser")
     # print(urlsoup.prettify())
     if origin == '1337x':
@@ -287,7 +291,10 @@ while 1:
           tor_seed["Uploaded"][maxIndex])
     print(Fore.BLUE + 'Torrent Link: ' +
           Style.BRIGHT + tor_seed['Links'][maxIndex])
-    print(Fore.BLUE + "Magnet Link:\n" + Style.BRIGHT + magnet)
+    try:
+        print(Fore.BLUE + "Magnet Link:\n" + Style.BRIGHT + magnet)
+    except:
+        pass
     try:
         copyToClipBoard(magnet)
         print(Fore.GREEN + "Magnet Copied to ClipBoard")
